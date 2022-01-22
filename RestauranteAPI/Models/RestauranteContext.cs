@@ -44,9 +44,9 @@ namespace RestauranteAPI.Models
             );
 
             modelBuilder.Entity<Estafeta>().HasData(
-                new Estafeta { Id = 1, Nome = "Pedro Reis", Disponivel = true },
-                new Estafeta { Id = 2, Nome = "Rodrigo Nogueira", Disponivel = true },
-                new Estafeta { Id = 3, Nome = "Diogo Silva", Disponivel = true },
+                new Estafeta { Id = 1, Nome = "Pedro Reis", Disponivel = false },
+                new Estafeta { Id = 2, Nome = "Rodrigo Nogueira", Disponivel = false },
+                new Estafeta { Id = 3, Nome = "Diogo Silva", Disponivel = false },
                 new Estafeta { Id = 4, Nome = "Diogu Anjos", Disponivel = true },
                 new Estafeta { Id = 5, Nome = "Nicole Silva", Disponivel = true },
                 new Estafeta { Id = 6, Nome = "Bernardo Pacheco", Disponivel = true },
@@ -104,7 +104,7 @@ namespace RestauranteAPI.Models
                 {
                     Id = 1,
                     NumeroMesa = 1,
-                    Disponivel = true,
+                    Disponivel = false,
                     DataHoraAbertura = new DateTime(2022, 10, 9, 21, 00, 00),
                     DataHoraFecho = adicionarDataHoraFechoAuto(new DateTime(2022, 10, 9, 21, 00, 00)),
                     PrecoTotal = 4M,
