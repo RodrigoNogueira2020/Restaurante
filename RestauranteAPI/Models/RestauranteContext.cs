@@ -110,6 +110,7 @@ namespace RestauranteAPI.Models
                     PrecoTotal = 4M,
                     Estado = "Em Preparação"
                 }
+
             );
 
         }
