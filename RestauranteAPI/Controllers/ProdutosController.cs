@@ -25,16 +25,6 @@ namespace RestauranteAPI.Controllers
             _context.Database.EnsureCreated();
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> ObterTodosProdutos()
-        //{
-        //    List<Produto> p = await _context.Produto.ToListAsync();
-
-        //    if (p == null)
-        //        return NotFound();
-
-        //    return Ok(p);
-        //}
 
         [HttpGet]
         public async Task<IActionResult> ObterTodosProdutos([FromQuery] ParametrosProduto parametros)
@@ -62,19 +52,63 @@ namespace RestauranteAPI.Controllers
             return Ok(await p.ToListAsync());
         }
 
-        // produto/1
-        [HttpGet("{id}")]
-        public async Task<IActionResult> ObterProduto(int id)
+
+        [HttpPost]
+        public async Task<IActionResult> AdicionarProduto([FromBody] Produto produto)
         {
-            Produto p = await _context.Produto.SingleOrDefaultAsync(p => p.Id == id);
+            List<Produto> p = _context.Produto.ToList();
 
-            if(p == null)
-                return NotFound();
+            // Verifica se já existe um produto, baseado no nome
+            if (p.Any(p => p.Nome.ToLower() == produto.Nome.Trim().ToLower()))
+                return Conflict();
 
-            return Ok(p);
+            _context.Produto.Add(produto);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction("ObterTodosProdutos", new ParametrosProduto { Id = produto.Id }, produto);
         }
 
-        // Pagina 12 - file:///C:/Users/Ricardo/Desktop/CTESP/PIS-Programa%C3%A7%C3%A3o-e-Integra%C3%A7%C3%A3o-de-Servi%C3%A7os/LAB05_2/Lab%2005%20-%20ASP.NET%20Core%20RESTful%20Web%20API%20-%20Partes%201,%202,%203%20e%204.pdf
+        [HttpPut("{id}")]
+        public async Task<IActionResult> AtualizarProduto([FromRoute] int id, [FromBody] Produto produto)
+        {
+            if (id != produto.Id)
+                return BadRequest();
+
+            //Se o nome do produto for mudado para um nome já existente,
+            //é - lhe impedido de duplicar o nome
+            if (_context.Produto.Any(p => p.Nome.ToLower() == produto.Nome.Trim().ToLower()))
+                return Conflict();
+
+            _context.Entry(produto).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (_context.Produto.Find(id) == null)
+                    return NotFound();
+
+                throw;
+            }
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> ApagarProduto(int id)
+        {
+            Produto produto = await _context.Produto.SingleOrDefaultAsync(p => p.Id == id);
+            if (produto == null)
+                return NotFound();
+
+            _context.Produto.Remove(produto);
+
+            await _context.SaveChangesAsync();
+            return Ok(produto);
+        }
+
+
+        // Pagina 19 - file:///C:/Users/Ricardo/Desktop/CTESP/PIS-Programa%C3%A7%C3%A3o-e-Integra%C3%A7%C3%A3o-de-Servi%C3%A7os/LAB05_2/Lab%2005%20-%20ASP.NET%20Core%20RESTful%20Web%20API%20-%20Partes%201,%202,%203%20e%204.pdf
 
     }
 }
