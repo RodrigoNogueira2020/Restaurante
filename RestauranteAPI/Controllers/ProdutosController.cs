@@ -29,37 +29,36 @@ namespace RestauranteAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> ObterTodosProdutos([FromQuery] ParametrosProduto parametros)
         {
-            IQueryable<Produto> p = _context.Produto;
+            IQueryable<Produto> produtosDB = _context.Produto;
 
             if (parametros.Id != null)
-                p = p.Where(p => p.Id == parametros.Id);
+                produtosDB = produtosDB.Where(p => p.Id == parametros.Id);
 
             if (!string.IsNullOrWhiteSpace(parametros.Nome))
-                p = p.Where(p => p.Nome.ToLower().Contains(parametros.Nome.ToLower().Trim()));
+                produtosDB = produtosDB.Where(p => p.Nome.ToLower().Equals(parametros.Nome.ToLower().Trim()));
 
             if (parametros.Preco != null)
-                p = p.Where(p => p.Preco == parametros.Preco);
+                produtosDB = produtosDB.Where(p => p.Preco == parametros.Preco);
 
             if (parametros.Iva != null)
-                p = p.Where(p => p.Iva == parametros.Iva);
+                produtosDB = produtosDB.Where(p => p.Iva == parametros.Iva);
 
-            p = p.Skip(parametros.Tamanho * (parametros.Pagina - 1))
+            produtosDB = produtosDB.Skip(parametros.Tamanho * (parametros.Pagina - 1))
                  .Take(parametros.Tamanho);
 
-            if (p == null)
+            if (produtosDB == null)
                 return NotFound();
 
-            return Ok(await p.ToListAsync());
+            return Ok(await produtosDB.ToListAsync());
         }
 
 
         [HttpPost]
         public async Task<IActionResult> AdicionarProduto([FromBody] Produto produto)
         {
-            List<Produto> p = _context.Produto.ToList();
 
             // Verifica se já existe um produto, baseado no nome
-            if (p.Any(p => p.Nome.ToLower() == produto.Nome.Trim().ToLower()))
+            if(_context.Produto.Any(p => p.Nome.ToLower() == produto.Nome.Trim().ToLower()))
                 return Conflict();
 
             _context.Produto.Add(produto);
@@ -70,13 +69,17 @@ namespace RestauranteAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> AtualizarProduto([FromRoute] int id, [FromBody] Produto produto)
         {
-            if (id != produto.Id)
-                return BadRequest();
+            //List<Produto> p = _context.Produto.ToList();
+            //p.Add(produto);
 
             //Se o nome do produto for mudado para um nome já existente,
             //é - lhe impedido de duplicar o nome
-            if (_context.Produto.Any(p => p.Nome.ToLower() == produto.Nome.Trim().ToLower()))
-                return Conflict();
+
+            //if (_context.Produto.Any(p => p.Nome.ToLower() == produto.Nome.Trim().ToLower()))
+            //    return Conflict();
+
+            if (id != produto.Id)
+                return BadRequest();
 
             _context.Entry(produto).State = EntityState.Modified;
 

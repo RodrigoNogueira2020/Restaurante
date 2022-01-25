@@ -6,28 +6,19 @@ using System.Threading.Tasks;
 
 namespace RestauranteAPI.Models
 {
-    public class Item
+    public class ItemVerbose
     {
         public int Id { get; set; }
-
-        
+     
         // Encomenda tem Itens
         public int EncomendaId { get; set; }
-        [JsonIgnore]
-        public virtual Encomenda Encomenda { get; set; }
-
 
         // Pedido tem Itens
         public int PedidoId { get; set; }
-        [JsonIgnore]
-        public Pedido Pedido { get; set; }
-
 
         // Colunas do Item
         public int ProdutoId { get; set; }
-
-        [JsonIgnore]
-        public virtual Produto Produto { get; set; }
+        public string ProdutoNome { get; set; }
 
         public int Quantidade { get; set; }
     }

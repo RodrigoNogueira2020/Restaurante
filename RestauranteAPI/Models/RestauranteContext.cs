@@ -31,9 +31,14 @@ namespace RestauranteAPI.Models
                 .WithOne(p => p.Pedido)
                 .HasForeignKey(p => p.PedidoId);
 
-            modelBuilder.Entity<Item>()
-                .HasOne(e => e.Produto)
-                .WithOne(e => e.Item);
+            //modelBuilder.Entity<Item>()
+            //    .HasOne(e => e.Produto)
+            //    .WithOne(e => e.Itens);
+
+            modelBuilder.Entity<Produto>()
+                .HasMany(e => e.Itens)
+                .WithOne(e => e.Produto)
+                .HasForeignKey(e => e.ProdutoId);
 
 
             modelBuilder.Entity<Produto>().HasData(

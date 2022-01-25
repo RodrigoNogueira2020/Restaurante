@@ -12,9 +12,9 @@ namespace RestauranteAPI.Models
         public string Nome { get; set; }
         public decimal Preco { get; set; }
         public double Iva { get; set; }
-        [JsonIgnore]
-        public virtual Item Item { get; set; }
 
+        [JsonIgnore]
+        public List<Item> Itens { get; set; }
 
     }
 }
