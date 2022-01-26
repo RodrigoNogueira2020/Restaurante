@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestauranteAPI.Models;
+using RestauranteAPI.QueryModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,14 +25,27 @@ namespace RestauranteAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ObterTodosEstafetas()
+        public async Task<IActionResult> ObterTodosEstafetas([FromQuery] ParametrosEstafeta parametros)
         {
-            List<Estafeta> p = await _context.Estafeta.ToListAsync();
 
-            if (p == null)
+            IQueryable<Estafeta> EstafetasDB = _context.Estafeta;
+
+            if (parametros.Id != null)
+                EstafetasDB = EstafetasDB.Where(p => p.Id == parametros.Id);
+
+            if (!string.IsNullOrWhiteSpace(parametros.Nome))
+                EstafetasDB = EstafetasDB.Where(p => p.Nome.ToLower().Equals(parametros.Nome.ToLower().Trim()));
+
+            if (parametros.Disponivel != null)
+                EstafetasDB = EstafetasDB.Where(p => p.Disponivel == parametros.Disponivel);
+
+            EstafetasDB = EstafetasDB.Skip(parametros.Tamanho * (parametros.Pagina - 1))
+                 .Take(parametros.Tamanho);
+
+            if (EstafetasDB == null)
                 return NotFound();
 
-            return Ok(p);
+            return Ok(await EstafetasDB.ToListAsync());
         }
 
         [HttpGet("{id}")]
@@ -44,6 +57,54 @@ namespace RestauranteAPI.Controllers
                 return NotFound();
 
             return Ok(e);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AdicionarEstafeta([FromBody] Estafeta estafeta)
+        {
+            if (_context.Produto.Any(p => p.Nome.ToLower() == estafeta.Nome.Trim().ToLower()))
+                return Conflict();
+
+            _context.Estafeta.Add(estafeta);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction("ObterTodosEstafetas", new ParametrosEstafeta { Id = estafeta.Id }, estafeta);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> AtualizarEstafeta([FromRoute] int id, [FromBody] Estafeta estafeta)
+        {
+            if (id != estafeta.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(estafeta).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (_context.Estafeta.Find(id) == null)
+                    return NotFound();
+
+                throw;
+            }
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> ApagarEstafeta(int id)
+        {
+            Estafeta estafeta = await _context.Estafeta.SingleOrDefaultAsync(p => p.Id == id);
+            if (estafeta == null)
+                return NotFound();
+
+            _context.Estafeta.Remove(estafeta);
+
+            await _context.SaveChangesAsync();
+            return Ok(estafeta);
         }
     }
 }
