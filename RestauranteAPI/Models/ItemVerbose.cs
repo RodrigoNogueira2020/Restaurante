@@ -19,7 +19,6 @@ namespace RestauranteAPI.Models
         // Colunas do Item
         public int ProdutoId { get; set; }
         public string ProdutoNome { get; set; }
-
         public int Quantidade { get; set; }
     }
 }

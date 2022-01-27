@@ -97,13 +97,10 @@ namespace RestauranteAPI.Models
             modelBuilder.Entity<Item>().HasData(
                 new Item { Id = 1, ProdutoId = 2, Quantidade = 2, EncomendaId = 1},
                 new Item { Id = 2, ProdutoId = 4, Quantidade = 2, EncomendaId = 1},
-
                 new Item { Id = 3, ProdutoId = 5, Quantidade = 6, EncomendaId = 2},
                 new Item { Id = 4, ProdutoId = 3, Quantidade = 2, EncomendaId = 2},
-
                 new Item { Id = 5, ProdutoId = 3, Quantidade = 4, EncomendaId = 3},
                 new Item { Id = 6, ProdutoId = 6, Quantidade = 10, EncomendaId = 3},
-
                 new Item { Id = 7, ProdutoId = 7, Quantidade = 1, PedidoId = 1}
             );
 
@@ -118,9 +115,7 @@ namespace RestauranteAPI.Models
                     PrecoTotal = 4M,
                     Estado = "Em Preparação"
                 }
-
             );
-
         }
 
         private DateTime adicionarDataHoraFechoAuto(DateTime data)

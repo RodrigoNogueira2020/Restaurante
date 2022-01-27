@@ -29,9 +29,16 @@ namespace RestauranteAPI.Controllers
         public IActionResult ObterTodosItens([FromQuery] ParametrosItem parametros)
         {
             IQueryable<Item> ItemBD = _context.Item;
+            IQueryable<Pedido> PedidoDB = _context.Pedido;
 
             if (parametros.Id != null)
                 ItemBD = ItemBD.Where(i => i.Id == parametros.Id);
+
+            if (parametros.EncomendaId != null)
+                ItemBD = ItemBD.Where(i => i.EncomendaId.Equals(parametros.EncomendaId));
+
+            if (parametros.PedidoId != null)
+                ItemBD = ItemBD.Where(i => i.PedidoId.Equals(parametros.PedidoId));
 
             if (parametros.ProdutoId != null)
                 ItemBD = ItemBD.Where(i => i.Produto.Id.Equals(parametros.ProdutoId));
