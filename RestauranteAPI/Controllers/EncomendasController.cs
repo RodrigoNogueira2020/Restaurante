@@ -105,6 +105,8 @@ namespace RestauranteAPI.Controllers
                         Quantidade = l.Quantidade,
                     }).ToList();
 
+            Estafeta estafeta = _context.Estafeta.Where(i => i.Id == p.EstafetaId).FirstOrDefault();
+
             EncomendaVerbose pop = new()
             {
                 Id = p.Id,
@@ -119,6 +121,41 @@ namespace RestauranteAPI.Controllers
             };
 
             return Ok(pop);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> AtualizarEncomendas([FromRoute] int id, [FromBody] Encomenda encomenda)
+        {
+            if (id != encomenda.Id)
+                return BadRequest();
+
+            _context.Entry(encomenda).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (_context.Encomenda.Find(id) == null)
+                    return NotFound();
+
+                throw;
+            }
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> ApagarEncomenda(int id)
+        {
+            Encomenda encomenda = await _context.Encomenda.SingleOrDefaultAsync(p => p.Id == id);
+            if (encomenda == null)
+                return NotFound();
+
+            _context.Encomenda.Remove(encomenda);
+
+            await _context.SaveChangesAsync();
+            return Ok(encomenda);
         }
     }
 
