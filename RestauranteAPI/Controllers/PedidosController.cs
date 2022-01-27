@@ -92,14 +92,43 @@ namespace RestauranteAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> ObterPedido(int id)
+        public IActionResult ObterPedido(int id)
         {
-            Pedido i = await _context.Pedido.SingleOrDefaultAsync(i => i.Id == id);
-
-            if (i == null)
+            Pedido p;
+            try
+            {
+                p = _context.Pedido.Where(p => p.Id == id).Single();
+            }
+            catch (System.InvalidOperationException e)
+            {
                 return NotFound();
+            }
 
-            return Ok(i);
+            List<ItemVerbose> pop0 = _context.Item.Where(i => i.PedidoId == p.Id)
+                    .Include(i => i.Pedido)
+                    .Select(l => new ItemVerbose()
+                    {
+                        Id = l.Id,
+                        EncomendaId = l.EncomendaId,
+                        PedidoId = l.PedidoId,
+                        ProdutoId = l.ProdutoId,
+                        ProdutoNome = l.Produto.Nome,
+                        Quantidade = l.Quantidade,
+                    }).ToList();
+
+            PedidoVerbose pop = new()
+            {
+                Id = p.Id,
+                NumeroMesa = p.NumeroMesa,
+                Disponivel = p.Disponivel,
+                DataHoraAbertura = p.DataHoraAbertura,
+                DataHoraFecho = p.DataHoraFecho,
+                Itens = pop0,
+                PrecoTotal = p.PrecoTotal,
+                Estado = p.Estado,
+            };
+
+            return Ok(pop);
         }
     }
 }

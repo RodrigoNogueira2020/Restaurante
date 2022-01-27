@@ -70,7 +70,7 @@ namespace RestauranteAPI.Controllers
                     Estado = encomenda.Estado,
                     Morada = encomenda.Morada,
                     EstafetaId = encomenda.EstafetaId,
-                    Estafeta = encomenda.Estafeta.Nome,
+                    EstafetaNome = encomenda.Estafeta.Nome,
                 };
 
                 encomendas.Add(pop);
@@ -81,14 +81,44 @@ namespace RestauranteAPI.Controllers
 
         // encomenda/1
         [HttpGet("{id}")]
-        public async Task<IActionResult> ObterEncomenda(int id)
+        public IActionResult ObterEncomenda(int id)
         {
-            Encomenda e = await _context.Encomenda.SingleOrDefaultAsync(e => e.Id == id);
-
-            if (e == null)
+            Encomenda p;
+            try
+            {
+                p = _context.Encomenda.Where(p => p.Id == id).Single();
+            }
+            catch (System.InvalidOperationException e)
+            {
                 return NotFound();
+            }
 
-            return Ok(e);
+            List<ItemVerbose> pop0 = _context.Item.Where(i => i.EncomendaId == p.Id)
+                    .Include(i => i.Pedido).Include(i => i.Produto)
+                    .Select(l => new ItemVerbose()
+                    {
+                        Id = l.Id,
+                        EncomendaId = l.EncomendaId,
+                        PedidoId = l.PedidoId,
+                        ProdutoId = l.ProdutoId,
+                        ProdutoNome = l.Produto.Nome,
+                        Quantidade = l.Quantidade,
+                    }).ToList();
+
+            EncomendaVerbose pop = new()
+            {
+                Id = p.Id,
+                Itens = pop0,
+                DataHoraAbertura = p.DataHoraAbertura,
+                DataHoraFecho = p.DataHoraFecho,
+                PrecoTotal = p.PrecoTotal,
+                Estado = p.Estado,
+                Morada = p.Morada,
+                EstafetaId = p.EstafetaId,
+                EstafetaNome = p.Estafeta.Nome,
+            };
+
+            return Ok(pop);
         }
     }
 

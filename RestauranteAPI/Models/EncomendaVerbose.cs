@@ -16,6 +16,6 @@ namespace RestauranteAPI.Models
         public string Morada { get; set; }
 
         public int EstafetaId { get; set; }
-        public string Estafeta { get; set; }
+        public string EstafetaNome { get; set; }
     }
 }
