@@ -25,7 +25,6 @@ namespace RestauranteAPI.Controllers
             _context.Database.EnsureCreated();
         }
 
-
         [HttpGet]
         public async Task<IActionResult> ObterTodosProdutos([FromQuery] ParametrosProduto parametros)
         {
@@ -52,11 +51,9 @@ namespace RestauranteAPI.Controllers
             return Ok(await produtosDB.ToListAsync());
         }
 
-
         [HttpPost]
         public async Task<IActionResult> AdicionarProduto([FromBody] Produto produto)
         {
-
             // Verifica se já existe um produto, baseado no nome
             if(_context.Produto.Any(p => p.Nome.ToLower() == produto.Nome.Trim().ToLower()))
                 return Conflict();
