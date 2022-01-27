@@ -123,6 +123,17 @@ namespace RestauranteAPI.Controllers
             return Ok(pop);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AdicionarProduto([FromBody] Encomenda encomenda)
+        {
+            if (!_context.Produto.Any(p => p.Id == encomenda.Id))
+                return NotFound();
+
+            _context.Encomenda.Add(encomenda);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction("ObterTodasEncomendas", new { id = encomenda.Id }, encomenda);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> AtualizarEncomendas([FromRoute] int id, [FromBody] Encomenda encomenda)
         {
