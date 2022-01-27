@@ -19,7 +19,14 @@ namespace RestauranteAPI.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Encomenda>().HasOne(e => e.Estafeta);
+            modelBuilder.Entity<Encomenda>()
+                .HasOne(e => e.Estafeta)
+                .WithMany(e => e.Encomendas);
+
+            modelBuilder.Entity<Estafeta>()
+                .HasMany(e => e.Encomendas)
+                .WithOne(e => e.Estafeta)
+                .HasForeignKey(e => e.EstafetaId);
 
             modelBuilder.Entity<Encomenda>()
                 .HasMany(e => e.Itens)

@@ -41,7 +41,7 @@ namespace RestauranteAPI.Controllers
                 ItemBD = ItemBD.Where(i => i.PedidoId.Equals(parametros.PedidoId));
 
             if (parametros.ProdutoId != null)
-                ItemBD = ItemBD.Where(i => i.Produto.Id.Equals(parametros.ProdutoId));
+                ItemBD = ItemBD.Where(i => i.Produto.Id == parametros.ProdutoId);
             
             if (!string.IsNullOrWhiteSpace(parametros.NomeProduto))
                 ItemBD = ItemBD.Where(i => i.Produto.Nome.ToLower() == parametros.NomeProduto.ToLower().Trim());
@@ -57,16 +57,16 @@ namespace RestauranteAPI.Controllers
 
             List<ItemVerbose> produtos = new();
 
-            foreach (Item produto in ItemBD.Include(i => i.Produto).ToList())
+            foreach (Item item in ItemBD.Include(i => i.Produto).ToList())
             {
                 ItemVerbose pop = new ItemVerbose()
                 {
-                    Id = produto.Id,
-                    EncomendaId = produto.EncomendaId,
-                    PedidoId = produto.PedidoId,
-                    ProdutoId = produto.ProdutoId,
-                    ProdutoNome = produto.Produto.Nome,
-                    Quantidade = produto.Quantidade,
+                    Id = item.Id,
+                    EncomendaId = item.EncomendaId,
+                    PedidoId = item.PedidoId,
+                    ProdutoId = item.ProdutoId,
+                    ProdutoNome = item.Produto.Nome,
+                    Quantidade = item.Quantidade,
                 };
                 produtos.Add(pop);
             }
