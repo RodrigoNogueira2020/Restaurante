@@ -75,14 +75,29 @@ namespace RestauranteAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> ObterItens(int id)
+        public IActionResult ObterItens(int id)
         {
-            Item e = await _context.Item.SingleOrDefaultAsync(e => e.Id == id);
-
-            if (e == null)
+            Item unicoItem;
+            try
+            {
+                unicoItem = _context.Item.Where(e => e.Id == id).Include(e => e.Produto).Single();
+            }
+            catch(System.InvalidOperationException e)
+            {
                 return NotFound();
+            }
 
-            return Ok(e);
+            ItemVerbose pop = new()
+            {
+                Id = unicoItem.Id,
+                EncomendaId = unicoItem.EncomendaId,
+                PedidoId = unicoItem.PedidoId,
+                ProdutoId = unicoItem.ProdutoId,
+                ProdutoNome = unicoItem.Produto.Nome,
+                Quantidade = unicoItem.Quantidade
+            };
+
+            return Ok(pop);
         }
 
         [HttpPost]
@@ -100,6 +115,42 @@ namespace RestauranteAPI.Controllers
             await _context.SaveChangesAsync();
             return CreatedAtAction("ObterItens", new { id = item.Id }, item);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> AtualizarItem([FromRoute] int id, [FromBody] Item Item)
+        {
+            if (id != Item.Id)
+                return BadRequest();
+
+            _context.Entry(Item).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (_context.Item.Find(id) == null)
+                    return NotFound();
+
+                throw;
+            }
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> ApagarProduto(int id)
+        {
+            Item item = await _context.Item.SingleOrDefaultAsync(p => p.Id == id);
+            if (item == null)
+                return NotFound();
+
+            _context.Item.Remove(item);
+
+            await _context.SaveChangesAsync();
+            return Ok(item);
+        }
+
 
     }
 }
