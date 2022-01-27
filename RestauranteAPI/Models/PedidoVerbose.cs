@@ -8,7 +8,6 @@ namespace RestauranteAPI.Models
 {
     public class PedidoVerbose
     {
-        [JsonIgnore]
         public int Id { get; set; }
         public int NumeroMesa { get; set; }
         public bool Disponivel { get; set; }

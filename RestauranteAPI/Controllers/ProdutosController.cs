@@ -66,15 +66,6 @@ namespace RestauranteAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> AtualizarProduto([FromRoute] int id, [FromBody] Produto produto)
         {
-            //List<Produto> p = _context.Produto.ToList();
-            //p.Add(produto);
-
-            //Se o nome do produto for mudado para um nome já existente,
-            //é - lhe impedido de duplicar o nome
-
-            //if (_context.Produto.Any(p => p.Nome.ToLower() == produto.Nome.Trim().ToLower()))
-            //    return Conflict();
-
             if (id != produto.Id)
                 return BadRequest();
 

@@ -28,7 +28,6 @@ namespace RestauranteAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> ObterTodosPedidos([FromQuery] ParametrosPedido parametros)
         {
-
             IQueryable<Pedido> pedidos = _context.Pedido;
 
             if (parametros.Id != null)
@@ -87,19 +86,93 @@ namespace RestauranteAPI.Controllers
                 };
                 produtos.Add(pop);
             }
-
             return Ok(produtos);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> ObterPedido(int id)
+        public IActionResult ObterPedido(int id)
         {
-            Pedido i = await _context.Pedido.SingleOrDefaultAsync(i => i.Id == id);
+            Pedido p;
+            try
+            {
+                p = _context.Pedido.Where(p => p.Id == id).Single();
+            }
+            catch (System.InvalidOperationException e)
+            {
+                return NotFound();
+            }
 
-            if (i == null)
+            List<ItemVerbose> pop0 = _context.Item.Where(i => i.PedidoId == p.Id)
+                    .Include(i => i.Pedido)
+                    .Select(l => new ItemVerbose()
+                    {
+                        Id = l.Id,
+                        EncomendaId = l.EncomendaId,
+                        PedidoId = l.PedidoId,
+                        ProdutoId = l.ProdutoId,
+                        ProdutoNome = l.Produto.Nome,
+                        Quantidade = l.Quantidade,
+                    }).ToList();
+
+            PedidoVerbose pop = new()
+            {
+                Id = p.Id,
+                NumeroMesa = p.NumeroMesa,
+                Disponivel = p.Disponivel,
+                DataHoraAbertura = p.DataHoraAbertura,
+                DataHoraFecho = p.DataHoraFecho,
+                Itens = pop0,
+                PrecoTotal = p.PrecoTotal,
+                Estado = p.Estado,
+            };
+
+            return Ok(pop);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AdicionarProduto([FromBody] Pedido pedido)
+        {
+            if (!_context.Produto.Any(p => p.Id == pedido.Id))
                 return NotFound();
 
-            return Ok(i);
+            _context.Pedido.Add(pedido);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction("ObterTodosPedidos", new { id = pedido.Id }, pedido);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> AtualizarPedido([FromRoute] int id, [FromBody] Pedido pedido)
+        {
+            if (id != pedido.Id)
+                return BadRequest();
+
+            _context.Entry(pedido).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (_context.Pedido.Find(id) == null)
+                    return NotFound();
+
+                throw;
+            }
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> ApagarPedido(int id)
+        {
+            Pedido pedido = await _context.Pedido.SingleOrDefaultAsync(p => p.Id == id);
+            if (pedido == null)
+                return NotFound();
+
+            _context.Pedido.Remove(pedido);
+
+            await _context.SaveChangesAsync();
+            return Ok(pedido);
         }
     }
 }
