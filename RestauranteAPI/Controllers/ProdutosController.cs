@@ -51,6 +51,17 @@ namespace RestauranteAPI.Controllers
             return Ok(await produtosDB.ToListAsync());
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> ObterProduto(int id)
+        {
+            Produto p = await _context.Produto.SingleOrDefaultAsync(p => p.Id == id);
+
+            if (p == null)
+                return NotFound();
+
+            return Ok(p);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AdicionarProduto([FromBody] Produto produto)
         {
