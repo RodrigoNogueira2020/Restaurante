@@ -47,7 +47,7 @@ namespace RestauranteAPI.Controllers
 
             foreach (Encomenda encomenda in encomendaDB.Include(i => i.Estafeta).ToList())
             {
-                List<ItemDto> pop0 = _context.Item.Where(i => i.EncomendaId == encomenda.Id)
+                List<ItemDto> itemDto = _context.Item.Where(i => i.EncomendaId == encomenda.Id)
                     .Include(i => i.Produto)
                     .Select(l => new ItemDto()
                     {
@@ -59,11 +59,10 @@ namespace RestauranteAPI.Controllers
                         Quantidade = l.Quantidade,
                     }).ToList();
 
-                EncomendaDto pop = new()
+                EncomendaDto encomendaDto = new()
                 {
                     Id = encomenda.Id,
-                    //Itens = encomenda.Itens,
-                    Itens = pop0,
+                    Itens = itemDto,
                     DataHoraAbertura = encomenda.DataHoraAbertura,
                     DataHoraFecho = encomenda.DataHoraFecho,
                     PrecoTotal = encomenda.PrecoTotal,
@@ -73,7 +72,7 @@ namespace RestauranteAPI.Controllers
                     EstafetaNome = encomenda.Estafeta.Nome,
                 };
 
-                encomendas.Add(pop);
+                encomendas.Add(encomendaDto);
             }
 
             return Ok(encomendas);
@@ -83,50 +82,50 @@ namespace RestauranteAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult ObterEncomenda(int id)
         {
-            Encomenda p;
+            Encomenda encomendaAObter;
             try
             {
-                p = _context.Encomenda.Where(p => p.Id == id).Single();
+                encomendaAObter = _context.Encomenda.Where(e => e.Id == id).Single();
             }
             catch (System.InvalidOperationException e)
             {
                 return NotFound();
             }
 
-            List<ItemDto> pop0 = _context.Item.Where(i => i.EncomendaId == p.Id)
+            List<ItemDto> itensDto = _context.Item.Where(i => i.EncomendaId == encomendaAObter.Id)
                     .Include(i => i.Pedido).Include(i => i.Produto)
-                    .Select(l => new ItemDto()
+                    .Select(itemDto => new ItemDto()
                     {
-                        Id = l.Id,
-                        EncomendaId = l.EncomendaId,
-                        PedidoId = l.PedidoId,
-                        ProdutoId = l.ProdutoId,
-                        ProdutoNome = l.Produto.Nome,
-                        Quantidade = l.Quantidade,
+                        Id = itemDto.Id,
+                        EncomendaId = itemDto.EncomendaId,
+                        PedidoId = itemDto.PedidoId,
+                        ProdutoId = itemDto.ProdutoId,
+                        ProdutoNome = itemDto.Produto.Nome,
+                        Quantidade = itemDto.Quantidade,
                     }).ToList();
 
-            Estafeta estafeta = _context.Estafeta.Where(i => i.Id == p.EstafetaId).FirstOrDefault();
+            Estafeta estafeta = _context.Estafeta.Where(e => e.Id == encomendaAObter.EstafetaId).FirstOrDefault();
 
-            EncomendaDto pop = new()
+            EncomendaDto encomendaDto = new()
             {
-                Id = p.Id,
-                Itens = pop0,
-                DataHoraAbertura = p.DataHoraAbertura,
-                DataHoraFecho = p.DataHoraFecho,
-                PrecoTotal = p.PrecoTotal,
-                Estado = p.Estado,
-                Morada = p.Morada,
-                EstafetaId = p.EstafetaId,
-                EstafetaNome = p.Estafeta.Nome,
+                Id = encomendaAObter.Id,
+                Itens = itensDto,
+                DataHoraAbertura = encomendaAObter.DataHoraAbertura,
+                DataHoraFecho = encomendaAObter.DataHoraFecho,
+                PrecoTotal = encomendaAObter.PrecoTotal,
+                Estado = encomendaAObter.Estado,
+                Morada = encomendaAObter.Morada,
+                EstafetaId = encomendaAObter.EstafetaId,
+                EstafetaNome = encomendaAObter.Estafeta.Nome,
             };
 
-            return Ok(pop);
+            return Ok(encomendaDto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AdicionarProduto([FromBody] Encomenda encomenda)
+        public async Task<IActionResult> AdicionarEncomenda([FromBody] Encomenda encomenda)
         {
-            if (!_context.Produto.Any(p => p.Id == encomenda.Id))
+            if (!_context.Encomenda.Any(e => e.Id == encomenda.Id))
                 return NotFound();
 
             _context.Encomenda.Add(encomenda);

@@ -28,41 +28,42 @@ namespace RestauranteAPI.Controllers
         [HttpGet]
         public IActionResult ObterTodosPedidos([FromQuery] ParametrosPedido parametros)
         {
-            IQueryable<Pedido> pedidos = _context.Pedido;
+            IQueryable<Pedido> pedidosDB = _context.Pedido;
 
             if (parametros.Id != null)
-                pedidos = pedidos.Where(p => p.Id == parametros.Id);
+                pedidosDB = pedidosDB.Where(p => p.Id == parametros.Id);
 
             if (parametros.NumeroMesa != null)
-                pedidos = pedidos.Where(p => p.NumeroMesa == parametros.NumeroMesa);
+                pedidosDB = pedidosDB.Where(p => p.NumeroMesa == parametros.NumeroMesa);
 
             if (parametros.Disponivel != null)
-                pedidos = pedidos.Where(p => p.Disponivel == parametros.Disponivel);
+                pedidosDB = pedidosDB.Where(p => p.Disponivel == parametros.Disponivel);
 
             if (parametros.DataHoraAbertura != null)
-                pedidos = pedidos.Where(p => p.DataHoraAbertura == parametros.DataHoraAbertura);
+                pedidosDB = pedidosDB.Where(p => p.DataHoraAbertura == parametros.DataHoraAbertura);
 
             if (parametros.DataHoraFecho != null)
-                pedidos = pedidos.Where(p => p.DataHoraFecho == parametros.DataHoraFecho);
+                pedidosDB = pedidosDB.Where(p => p.DataHoraFecho == parametros.DataHoraFecho);
 
             if (parametros.PrecoTotal < 0 && parametros.PrecoTotal != null)
-                pedidos = pedidos.Where(p => p.PrecoTotal == parametros.PrecoTotal);
+                pedidosDB = pedidosDB.Where(p => p.PrecoTotal == parametros.PrecoTotal);
 
             if (!string.IsNullOrWhiteSpace(parametros.Estado))
-                pedidos = pedidos.Where(p => p.Estado.ToLower().Equals(parametros.Estado.ToLower().Trim()));
+                pedidosDB = pedidosDB.Where(p => p.Estado.ToLower().Equals(parametros.Estado.ToLower().Trim()));
 
-            pedidos = pedidos.Skip(parametros.Tamanho * (parametros.Pagina - 1)).Take(parametros.Tamanho);
+            pedidosDB = pedidosDB.Skip(parametros.Tamanho * (parametros.Pagina - 1)).Take(parametros.Tamanho);
 
-            if (pedidos == null)
+            if (pedidosDB == null)
                 return NotFound();
 
             List<PedidoDto> produtos = new();
 
-            foreach (Pedido pedido in pedidos.Include(i => i.Itens).ToList())
+            foreach (Pedido pedido in pedidosDB.Include(i => i.Itens).ToList())
             {
 
-                List<ItemDto> pop0 = _context.Item.Where(i => i.PedidoId == pedido.Id)
-                    .Include(i => i.Pedido)
+                // Item com nome do produto incluido
+                List<ItemDto> itemDto = _context.Item.Where(i => i.PedidoId == pedido.Id)
+                    .Include(i => i.Produto)
                     .Select(l => new ItemDto()
                     {
                         Id = l.Id,
@@ -73,7 +74,8 @@ namespace RestauranteAPI.Controllers
                         Quantidade = l.Quantidade,
                     }).ToList();
 
-                PedidoDto pop = new PedidoDto()
+                // Pedido com a lista de itens incluida
+                PedidoDto pedidoDto = new()
                 {
                     Id = pedido.Id,
                     NumeroMesa = pedido.NumeroMesa,
@@ -82,9 +84,9 @@ namespace RestauranteAPI.Controllers
                     DataHoraFecho = pedido.DataHoraFecho,
                     PrecoTotal = pedido.PrecoTotal,
                     Estado = pedido.Estado,
-                    Itens = pop0
+                    Itens = itemDto
                 };
-                produtos.Add(pop);
+                produtos.Add(pedidoDto);
             }
             return Ok(produtos);
         }
@@ -92,47 +94,49 @@ namespace RestauranteAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult ObterPedido(int id)
         {
-            Pedido p;
+            Pedido pedidoAObter;
             try
             {
-                p = _context.Pedido.Where(p => p.Id == id).Single();
+                pedidoAObter = _context.Pedido.Where(p => p.Id == id).Single();
             }
             catch (System.InvalidOperationException e)
             {
                 return NotFound();
             }
 
-            List<ItemDto> pop0 = _context.Item.Where(i => i.PedidoId == p.Id)
+            // Item com nome do produto incluido
+            List<ItemDto> itensDto = _context.Item.Where(i => i.PedidoId == pedidoAObter.Id)
                     .Include(i => i.Pedido)
-                    .Select(l => new ItemDto()
+                    .Select(itemDto => new ItemDto()
                     {
-                        Id = l.Id,
-                        EncomendaId = l.EncomendaId,
-                        PedidoId = l.PedidoId,
-                        ProdutoId = l.ProdutoId,
-                        ProdutoNome = l.Produto.Nome,
-                        Quantidade = l.Quantidade,
+                        Id = itemDto.Id,
+                        EncomendaId = itemDto.EncomendaId,
+                        PedidoId = itemDto.PedidoId,
+                        ProdutoId = itemDto.ProdutoId,
+                        ProdutoNome = itemDto.Produto.Nome,
+                        Quantidade = itemDto.Quantidade,
                     }).ToList();
 
-            PedidoDto pop = new()
+            // Pedido com a lista de itens incluida
+            PedidoDto pedidoDto = new()
             {
-                Id = p.Id,
-                NumeroMesa = p.NumeroMesa,
-                Disponivel = p.Disponivel,
-                DataHoraAbertura = p.DataHoraAbertura,
-                DataHoraFecho = p.DataHoraFecho,
-                Itens = pop0,
-                PrecoTotal = p.PrecoTotal,
-                Estado = p.Estado,
+                Id = pedidoAObter.Id,
+                NumeroMesa = pedidoAObter.NumeroMesa,
+                Disponivel = pedidoAObter.Disponivel,
+                DataHoraAbertura = pedidoAObter.DataHoraAbertura,
+                DataHoraFecho = pedidoAObter.DataHoraFecho,
+                Itens = itensDto,
+                PrecoTotal = pedidoAObter.PrecoTotal,
+                Estado = pedidoAObter.Estado,
             };
 
-            return Ok(pop);
+            return Ok(pedidoDto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AdicionarProduto([FromBody] Pedido pedido)
+        public async Task<IActionResult> AdicionarPedido([FromBody] Pedido pedido)
         {
-            if (!_context.Produto.Any(p => p.Id == pedido.Id))
+            if (!_context.Pedido.Any(p => p.Id == pedido.Id))
                 return NotFound();
 
             _context.Pedido.Add(pedido);
@@ -165,14 +169,14 @@ namespace RestauranteAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> ApagarPedido(int id)
         {
-            Pedido pedido = await _context.Pedido.SingleOrDefaultAsync(p => p.Id == id);
-            if (pedido == null)
+            Pedido pedidoAApagar = await _context.Pedido.SingleOrDefaultAsync(p => p.Id == id);
+            if (pedidoAApagar == null)
                 return NotFound();
 
-            _context.Pedido.Remove(pedido);
+            _context.Pedido.Remove(pedidoAApagar);
 
             await _context.SaveChangesAsync();
-            return Ok(pedido);
+            return Ok(pedidoAApagar);
         }
     }
 }

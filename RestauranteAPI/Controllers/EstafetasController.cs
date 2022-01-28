@@ -51,18 +51,18 @@ namespace RestauranteAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> ObterEstafeta(int id)
         {
-            Estafeta e = await _context.Estafeta.SingleOrDefaultAsync(e => e.Id == id);
+            Estafeta estafeta = await _context.Estafeta.SingleOrDefaultAsync(e => e.Id == id);
 
-            if (e == null)
+            if(estafeta == null)
                 return NotFound();
 
-            return Ok(e);
+            return Ok(estafeta);
         }
 
         [HttpPost]
         public async Task<IActionResult> AdicionarEstafeta([FromBody] Estafeta estafeta)
         {
-            if (_context.Produto.Any(p => p.Nome.ToLower() == estafeta.Nome.Trim().ToLower()))
+            if(_context.Estafeta.Any(p => p.Id == estafeta.Id))
                 return Conflict();
 
             _context.Estafeta.Add(estafeta);

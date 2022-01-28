@@ -55,11 +55,11 @@ namespace RestauranteAPI.Controllers
             if (ItemBD == null)
                 return NotFound();
 
-            List<ItemDto> produtos = new();
+            List<ItemDto> itensDto = new();
 
             foreach (Item item in ItemBD.Include(i => i.Produto).ToList())
             {
-                ItemDto pop = new ItemDto()
+                ItemDto itemDto = new ItemDto()
                 {
                     Id = item.Id,
                     EncomendaId = item.EncomendaId,
@@ -68,36 +68,36 @@ namespace RestauranteAPI.Controllers
                     ProdutoNome = item.Produto.Nome,
                     Quantidade = item.Quantidade,
                 };
-                produtos.Add(pop);
+                itensDto.Add(itemDto);
             }
 
-            return Ok(produtos);
+            return Ok(itensDto);
         }
 
         [HttpGet("{id}")]
         public IActionResult ObterItens(int id)
         {
-            Item unicoItem;
+            Item itemAObter;
             try
             {
-                unicoItem = _context.Item.Where(e => e.Id == id).Include(e => e.Produto).Single();
+                itemAObter = _context.Item.Where(e => e.Id == id).Include(e => e.Produto).Single();
             }
             catch (System.InvalidOperationException e)
             {
                 return NotFound();
             }
 
-            ItemDto pop = new()
+            ItemDto itemDto = new()
             {
-                Id = unicoItem.Id,
-                EncomendaId = unicoItem.EncomendaId,
-                PedidoId = unicoItem.PedidoId,
-                ProdutoId = unicoItem.ProdutoId,
-                ProdutoNome = unicoItem.Produto.Nome,
-                Quantidade = unicoItem.Quantidade
+                Id = itemAObter.Id,
+                EncomendaId = itemAObter.EncomendaId,
+                PedidoId = itemAObter.PedidoId,
+                ProdutoId = itemAObter.ProdutoId,
+                ProdutoNome = itemAObter.Produto.Nome,
+                Quantidade = itemAObter.Quantidade
             };
 
-            return Ok(pop);
+            return Ok(itemDto);
         }
 
         [HttpPost]
@@ -105,7 +105,7 @@ namespace RestauranteAPI.Controllers
         {
 
             //Verifica se o produto existe
-            if (!_context.Produto.Any(p => p.Id == item.ProdutoId))
+            if (!_context.Item.Any(p => p.Id == item.Id))
                 return NotFound();
 
             else if (item.Quantidade <= 0)

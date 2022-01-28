@@ -54,12 +54,12 @@ namespace RestauranteAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> ObterProduto(int id)
         {
-            Produto p = await _context.Produto.SingleOrDefaultAsync(p => p.Id == id);
+            Produto produtoAObter = await _context.Produto.SingleOrDefaultAsync(p => p.Id == id);
 
-            if (p == null)
+            if (produtoAObter == null)
                 return NotFound();
 
-            return Ok(p);
+            return Ok(produtoAObter);
         }
 
         [HttpPost]
@@ -108,9 +108,6 @@ namespace RestauranteAPI.Controllers
             await _context.SaveChangesAsync();
             return Ok(produto);
         }
-
-
-        // Pagina 19 - file:///C:/Users/Ricardo/Desktop/CTESP/PIS-Programa%C3%A7%C3%A3o-e-Integra%C3%A7%C3%A3o-de-Servi%C3%A7os/LAB05_2/Lab%2005%20-%20ASP.NET%20Core%20RESTful%20Web%20API%20-%20Partes%201,%202,%203%20e%204.pdf
-
+      
     }
 }
