@@ -55,11 +55,11 @@ namespace RestauranteAPI.Controllers
             if (ItemBD == null)
                 return NotFound();
 
-            List<ItemVerbose> produtos = new();
+            List<ItemDto> produtos = new();
 
             foreach (Item item in ItemBD.Include(i => i.Produto).ToList())
             {
-                ItemVerbose pop = new ItemVerbose()
+                ItemDto pop = new ItemDto()
                 {
                     Id = item.Id,
                     EncomendaId = item.EncomendaId,
@@ -87,7 +87,7 @@ namespace RestauranteAPI.Controllers
                 return NotFound();
             }
 
-            ItemVerbose pop = new()
+            ItemDto pop = new()
             {
                 Id = unicoItem.Id,
                 EncomendaId = unicoItem.EncomendaId,

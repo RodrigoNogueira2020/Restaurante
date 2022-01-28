@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace RestauranteAPI.Models
 {
-    public class EncomendaVerbose
+    public class PedidoDto
     {
         public int Id { get; set; }
-        public List<ItemVerbose> Itens { get; set; }
+        public int NumeroMesa { get; set; }
+        public bool Disponivel { get; set; }
+        public List<ItemDto> Itens { get; set; }
         public DateTime DataHoraAbertura { get; set; }
         public DateTime DataHoraFecho { get; set; }
         public decimal PrecoTotal { get; set; }
-        public string Estado { get; set; } // Aberto(?), Em Preparação, Servido
-        public string Morada { get; set; }
-        public int EstafetaId { get; set; }
-        public string EstafetaNome { get; set; }
+        public string Estado { get; set; }
     }
 }

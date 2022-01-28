@@ -26,7 +26,7 @@ namespace RestauranteAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ObterTodosPedidos([FromQuery] ParametrosPedido parametros)
+        public IActionResult ObterTodosPedidos([FromQuery] ParametrosPedido parametros)
         {
             IQueryable<Pedido> pedidos = _context.Pedido;
 
@@ -56,14 +56,14 @@ namespace RestauranteAPI.Controllers
             if (pedidos == null)
                 return NotFound();
 
-            List<PedidoVerbose> produtos = new();
+            List<PedidoDto> produtos = new();
 
             foreach (Pedido pedido in pedidos.Include(i => i.Itens).ToList())
             {
 
-                List<ItemVerbose> pop0 = _context.Item.Where(i => i.PedidoId == pedido.Id)
+                List<ItemDto> pop0 = _context.Item.Where(i => i.PedidoId == pedido.Id)
                     .Include(i => i.Pedido)
-                    .Select(l => new ItemVerbose()
+                    .Select(l => new ItemDto()
                     {
                         Id = l.Id,
                         EncomendaId = l.EncomendaId,
@@ -73,7 +73,7 @@ namespace RestauranteAPI.Controllers
                         Quantidade = l.Quantidade,
                     }).ToList();
 
-                PedidoVerbose pop = new PedidoVerbose()
+                PedidoDto pop = new PedidoDto()
                 {
                     Id = pedido.Id,
                     NumeroMesa = pedido.NumeroMesa,
@@ -102,9 +102,9 @@ namespace RestauranteAPI.Controllers
                 return NotFound();
             }
 
-            List<ItemVerbose> pop0 = _context.Item.Where(i => i.PedidoId == p.Id)
+            List<ItemDto> pop0 = _context.Item.Where(i => i.PedidoId == p.Id)
                     .Include(i => i.Pedido)
-                    .Select(l => new ItemVerbose()
+                    .Select(l => new ItemDto()
                     {
                         Id = l.Id,
                         EncomendaId = l.EncomendaId,
@@ -114,7 +114,7 @@ namespace RestauranteAPI.Controllers
                         Quantidade = l.Quantidade,
                     }).ToList();
 
-            PedidoVerbose pop = new()
+            PedidoDto pop = new()
             {
                 Id = p.Id,
                 NumeroMesa = p.NumeroMesa,

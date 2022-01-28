@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RestauranteAPI.Models
 {
-    public class ItemVerbose
+    public class ItemDto
     {
         public int Id { get; set; }
 

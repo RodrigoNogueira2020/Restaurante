@@ -43,13 +43,13 @@ namespace RestauranteAPI.Controllers
             if (encomendaDB == null)
                 return NotFound();
 
-            List<EncomendaVerbose> encomendas = new();
+            List<EncomendaDto> encomendas = new();
 
             foreach (Encomenda encomenda in encomendaDB.Include(i => i.Estafeta).ToList())
             {
-                List<ItemVerbose> pop0 = _context.Item.Where(i => i.EncomendaId == encomenda.Id)
+                List<ItemDto> pop0 = _context.Item.Where(i => i.EncomendaId == encomenda.Id)
                     .Include(i => i.Produto)
-                    .Select(l => new ItemVerbose()
+                    .Select(l => new ItemDto()
                     {
                         Id = l.Id,
                         EncomendaId = l.EncomendaId,
@@ -59,7 +59,7 @@ namespace RestauranteAPI.Controllers
                         Quantidade = l.Quantidade,
                     }).ToList();
 
-                EncomendaVerbose pop = new()
+                EncomendaDto pop = new()
                 {
                     Id = encomenda.Id,
                     //Itens = encomenda.Itens,
@@ -93,9 +93,9 @@ namespace RestauranteAPI.Controllers
                 return NotFound();
             }
 
-            List<ItemVerbose> pop0 = _context.Item.Where(i => i.EncomendaId == p.Id)
+            List<ItemDto> pop0 = _context.Item.Where(i => i.EncomendaId == p.Id)
                     .Include(i => i.Pedido).Include(i => i.Produto)
-                    .Select(l => new ItemVerbose()
+                    .Select(l => new ItemDto()
                     {
                         Id = l.Id,
                         EncomendaId = l.EncomendaId,
@@ -107,7 +107,7 @@ namespace RestauranteAPI.Controllers
 
             Estafeta estafeta = _context.Estafeta.Where(i => i.Id == p.EstafetaId).FirstOrDefault();
 
-            EncomendaVerbose pop = new()
+            EncomendaDto pop = new()
             {
                 Id = p.Id,
                 Itens = pop0,
