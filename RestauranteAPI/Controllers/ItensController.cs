@@ -42,7 +42,7 @@ namespace RestauranteAPI.Controllers
 
             if (parametros.ProdutoId != null)
                 ItemBD = ItemBD.Where(i => i.Produto.Id == parametros.ProdutoId);
-            
+
             if (!string.IsNullOrWhiteSpace(parametros.NomeProduto))
                 ItemBD = ItemBD.Where(i => i.Produto.Nome.ToLower() == parametros.NomeProduto.ToLower().Trim());
 
@@ -82,7 +82,7 @@ namespace RestauranteAPI.Controllers
             {
                 unicoItem = _context.Item.Where(e => e.Id == id).Include(e => e.Produto).Single();
             }
-            catch(System.InvalidOperationException e)
+            catch (System.InvalidOperationException e)
             {
                 return NotFound();
             }

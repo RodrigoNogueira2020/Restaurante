@@ -14,7 +14,6 @@ namespace RestauranteAPI.Models
         public DbSet<Item> Item { get; set; }
         public DbSet<Produto> Produto { get; set; }
 
-
         public RestauranteContext(DbContextOptions<RestauranteContext> opcoes) : base(opcoes) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,10 +36,6 @@ namespace RestauranteAPI.Models
                 .HasMany(p => p.Itens)
                 .WithOne(p => p.Pedido)
                 .HasForeignKey(p => p.PedidoId);
-
-            //modelBuilder.Entity<Item>()
-            //    .HasOne(e => e.Produto)
-            //    .WithOne(e => e.Itens);
 
             modelBuilder.Entity<Produto>()
                 .HasMany(e => e.Itens)
@@ -102,13 +97,13 @@ namespace RestauranteAPI.Models
             );
 
             modelBuilder.Entity<Item>().HasData(
-                new Item { Id = 1, ProdutoId = 2, Quantidade = 2, EncomendaId = 1},
-                new Item { Id = 2, ProdutoId = 4, Quantidade = 2, EncomendaId = 1},
-                new Item { Id = 3, ProdutoId = 5, Quantidade = 6, EncomendaId = 2},
-                new Item { Id = 4, ProdutoId = 3, Quantidade = 2, EncomendaId = 2},
-                new Item { Id = 5, ProdutoId = 3, Quantidade = 4, EncomendaId = 3},
-                new Item { Id = 6, ProdutoId = 6, Quantidade = 10, EncomendaId = 3},
-                new Item { Id = 7, ProdutoId = 7, Quantidade = 1, PedidoId = 1}
+                new Item { Id = 1, ProdutoId = 2, Quantidade = 2, EncomendaId = 1 },
+                new Item { Id = 2, ProdutoId = 4, Quantidade = 2, EncomendaId = 1 },
+                new Item { Id = 3, ProdutoId = 5, Quantidade = 6, EncomendaId = 2 },
+                new Item { Id = 4, ProdutoId = 3, Quantidade = 2, EncomendaId = 2 },
+                new Item { Id = 5, ProdutoId = 3, Quantidade = 4, EncomendaId = 3 },
+                new Item { Id = 6, ProdutoId = 6, Quantidade = 10, EncomendaId = 3 },
+                new Item { Id = 7, ProdutoId = 7, Quantidade = 1, PedidoId = 1 }
             );
 
             modelBuilder.Entity<Pedido>().HasData(

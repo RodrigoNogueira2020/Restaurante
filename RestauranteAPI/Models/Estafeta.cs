@@ -11,10 +11,7 @@ namespace RestauranteAPI.Models
         public int Id { get; set; }
         public string Nome { get; set; }
         public bool Disponivel { get; set; }
-
         [JsonIgnore]
         public virtual List<Encomenda> Encomendas { get; set; }
-
-
     }
 }

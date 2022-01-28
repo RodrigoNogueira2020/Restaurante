@@ -11,9 +11,10 @@ namespace RestauranteAPI.QueryModels
         private const int TAMANHO_MAXIMO = 100;
 
         public int Pagina { get; set; }
-        public int Tamanho {
+        public int Tamanho
+        {
             get { return tamanho; }
-            set 
+            set
             {
                 if (value > 0 && value < TAMANHO_MAXIMO)
                     tamanho = value;

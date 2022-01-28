@@ -66,7 +66,7 @@ namespace RestauranteAPI.Controllers
         public async Task<IActionResult> AdicionarProduto([FromBody] Produto produto)
         {
             // Verifica se já existe um produto, baseado no nome
-            if(_context.Produto.Any(p => p.Nome.ToLower() == produto.Nome.Trim().ToLower()))
+            if (_context.Produto.Any(p => p.Nome.ToLower() == produto.Nome.Trim().ToLower()))
                 return Conflict();
 
             _context.Produto.Add(produto);

@@ -14,7 +14,6 @@ namespace RestauranteAPI.Models
         public decimal PrecoTotal { get; set; }
         public string Estado { get; set; } // Aberto(?), Em Preparação, Servido
         public string Morada { get; set; }
-
         public int EstafetaId { get; set; }
         public string EstafetaNome { get; set; }
     }

@@ -9,7 +9,7 @@ namespace RestauranteAPI.Models
     public class ItemVerbose
     {
         public int Id { get; set; }
-     
+
         // Encomenda tem Itens
         public int EncomendaId { get; set; }
 
