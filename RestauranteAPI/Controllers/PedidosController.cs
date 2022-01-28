@@ -169,10 +169,17 @@ namespace RestauranteAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> ApagarPedido(int id)
         {
-            Pedido pedidoAApagar = await _context.Pedido.SingleOrDefaultAsync(p => p.Id == id);
+            Pedido pedidoAApagar = _context.Pedido.Where(p => p.Id == id).Single();
+
+            List<Item> itens = _context.Item.Where(i => i.PedidoId == pedidoAApagar.Id).ToList();
+
+            foreach (var item in itens)
+                _context.Item.Remove(item);
+
+
             if (pedidoAApagar == null)
                 return NotFound();
-
+                
             _context.Pedido.Remove(pedidoAApagar);
 
             await _context.SaveChangesAsync();

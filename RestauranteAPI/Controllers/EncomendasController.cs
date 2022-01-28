@@ -159,6 +159,12 @@ namespace RestauranteAPI.Controllers
         public async Task<IActionResult> ApagarEncomenda(int id)
         {
             Encomenda encomenda = await _context.Encomenda.SingleOrDefaultAsync(p => p.Id == id);
+
+            List<Item> itens = _context.Item.Where(i => i.EncomendaId == encomenda.Id).ToList();
+
+            foreach (var item in itens)
+                _context.Item.Remove(item);
+
             if (encomenda == null)
                 return NotFound();
 
