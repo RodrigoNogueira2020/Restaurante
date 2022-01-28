@@ -74,9 +74,10 @@ namespace RestauranteAPI.Controllers
         public async Task<IActionResult> AtualizarEstafeta([FromRoute] int id, [FromBody] Estafeta estafeta)
         {
             if (id != estafeta.Id)
-            {
                 return BadRequest();
-            }
+
+            if(!estafeta.Disponivel)
+                estafeta.Disponivel = true;
 
             _context.Entry(estafeta).State = EntityState.Modified;
 
