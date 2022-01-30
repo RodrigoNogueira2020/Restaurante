@@ -62,6 +62,97 @@ namespace Restaurante.ClienteMVC.Controllers
             return View(produtos);
         }
 
+        public async Task<IActionResult> ListarEncomendas()
+        {
+            var resposta = await _httpClient.GetAsync("encomenda");
+
+            resposta.EnsureSuccessStatusCode();
+
+            var conteudo = await resposta.Content.ReadAsStringAsync();
+
+            List<Encomenda> encomendas = new List<Encomenda>();
+
+            if (resposta.Content.Headers.ContentType != null &&
+            resposta.Content.Headers.ContentType.MediaType == "application/json")
+            {
+                var opcoes = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                }
+                ;
+                encomendas = JsonSerializer.Deserialize<List<Encomenda>>(conteudo, opcoes);
+            }
+            return View(encomendas);
+        }
+
+        public async Task<IActionResult> ListarEstafetas()
+        {
+            var resposta = await _httpClient.GetAsync("estafeta");
+
+            resposta.EnsureSuccessStatusCode();
+
+            var conteudo = await resposta.Content.ReadAsStringAsync();
+
+            List<Estafeta> estafetas = new List<Estafeta>();
+
+            if (resposta.Content.Headers.ContentType != null &&
+            resposta.Content.Headers.ContentType.MediaType == "application/json")
+            {
+                var opcoes = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                }
+                ;
+                estafetas = JsonSerializer.Deserialize<List<Estafeta>>(conteudo, opcoes);
+            }
+            return View(estafetas);
+        }
+
+        public async Task<IActionResult> ListarItens()
+        {
+            var resposta = await _httpClient.GetAsync("item");
+
+            resposta.EnsureSuccessStatusCode();
+
+            var conteudo = await resposta.Content.ReadAsStringAsync();
+
+            List<Item> itens = new List<Item>();
+
+            if (resposta.Content.Headers.ContentType != null &&
+            resposta.Content.Headers.ContentType.MediaType == "application/json")
+            {
+                var opcoes = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                }
+                ;
+                itens = JsonSerializer.Deserialize<List<Item>>(conteudo, opcoes);
+            }
+            return View(itens);
+        }
+
+        public async Task<IActionResult> ListarPedidos()
+        {
+            var resposta = await _httpClient.GetAsync("pedido");
+
+            resposta.EnsureSuccessStatusCode();
+
+            var conteudo = await resposta.Content.ReadAsStringAsync();
+
+            List<Pedido> pedidos = new List<Pedido>();
+
+            if (resposta.Content.Headers.ContentType != null &&
+            resposta.Content.Headers.ContentType.MediaType == "application/json")
+            {
+                var opcoes = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                }
+                ;
+                pedidos = JsonSerializer.Deserialize<List<Pedido>>(conteudo, opcoes);
+            }
+            return View(pedidos);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

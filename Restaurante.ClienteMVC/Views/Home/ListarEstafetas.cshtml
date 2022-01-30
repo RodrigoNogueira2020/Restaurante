@@ -1,11 +1,11 @@
-﻿@model IEnumerable<Restaurante.ClienteMVC.Models.Produto>
+﻿@model IEnumerable<Restaurante.ClienteMVC.Models.Estafeta>
 
 @{
-    ViewData["Title"] = "Lista de produtos";
+    ViewData["Title"] = "Lista de estafetas";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>ListarProdutos</h1>
+<h1>ListarEstafetas</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -20,10 +20,7 @@
                 @Html.DisplayNameFor(model => model.Nome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Preco)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Iva)
+                @Html.DisplayNameFor(model => model.Disponivel)
             </th>
             <th></th>
         </tr>
@@ -38,10 +35,7 @@
                 @Html.DisplayFor(modelItem => item.Nome)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Preco)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Iva)
+                @Html.DisplayFor(modelItem => item.Disponivel)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
