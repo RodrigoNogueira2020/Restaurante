@@ -43,8 +43,8 @@ namespace RestauranteAPI.Controllers
             if (parametros.ProdutoId != null)
                 ItemBD = ItemBD.Where(i => i.Produto.Id == parametros.ProdutoId);
 
-            if (!string.IsNullOrWhiteSpace(parametros.NomeProduto))
-                ItemBD = ItemBD.Where(i => i.Produto.Nome.ToLower() == parametros.NomeProduto.ToLower().Trim());
+            if (!string.IsNullOrWhiteSpace(parametros.ProdutoNome))
+                ItemBD = ItemBD.Where(i => i.Produto.Nome.ToLower().Contains(parametros.ProdutoNome.ToLower().Trim()));
 
             if (parametros.Quantidade != null)
                 ItemBD = ItemBD.Where(i => i.Quantidade == parametros.Quantidade);

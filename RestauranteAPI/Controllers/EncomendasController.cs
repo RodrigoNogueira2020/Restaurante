@@ -36,6 +36,25 @@ namespace RestauranteAPI.Controllers
             if (parametros.DataHoraAbertura != null)
                 encomendaDB = encomendaDB.Where(e => e.DataHoraAbertura.Equals(parametros.DataHoraAbertura));
 
+            if (parametros.DataHoraFecho != null)
+                encomendaDB = encomendaDB.Where(e => e.DataHoraFecho.Equals(parametros.DataHoraFecho));
+            
+            if (parametros.PrecoTotal != null)
+                encomendaDB = encomendaDB.Where(e => e.PrecoTotal.Equals(parametros.PrecoTotal));
+
+            if (parametros.Estado != null)
+                encomendaDB = encomendaDB.Where(e => e.Estado.Equals(parametros.Estado));
+
+            if (parametros.Morada != null)
+                encomendaDB = encomendaDB.Where(e => e.Morada.Equals(parametros.Morada));
+
+            if (parametros.EstafetaId != null)
+                encomendaDB = encomendaDB.Where(e => e.EstafetaId.Equals(parametros.EstafetaId));
+            
+            if (parametros.EstafetaNome != null)
+                encomendaDB = encomendaDB.Where(e => 
+                e.Estafeta.Nome.ToLower()
+                .Contains(parametros.EstafetaNome.Trim().ToLower()));
 
             encomendaDB = encomendaDB.Skip(parametros.Tamanho * (parametros.Pagina - 1))
                  .Take(parametros.Tamanho);

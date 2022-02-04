@@ -11,7 +11,7 @@ namespace RestauranteAPI.QueryModels
         public int? EncomendaId { get; set; }
         public int? PedidoId { get; set; }
         public int? ProdutoId { get; set; }
-        public string NomeProduto { get; set; }
+        public string ProdutoNome { get; set; }
         public int? Quantidade { get; set; }
     }
 }

@@ -34,7 +34,7 @@ namespace RestauranteAPI.Controllers
                 EstafetasDB = EstafetasDB.Where(p => p.Id == parametros.Id);
 
             if (!string.IsNullOrWhiteSpace(parametros.Nome))
-                EstafetasDB = EstafetasDB.Where(p => p.Nome.ToLower().Equals(parametros.Nome.ToLower().Trim()));
+                EstafetasDB = EstafetasDB.Where(p => p.Nome.ToLower().Contains(parametros.Nome.ToLower().Trim()));
 
             if (parametros.Disponivel != null)
                 EstafetasDB = EstafetasDB.Where(p => p.Disponivel == parametros.Disponivel);

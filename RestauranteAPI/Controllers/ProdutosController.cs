@@ -34,7 +34,7 @@ namespace RestauranteAPI.Controllers
                 produtosDB = produtosDB.Where(p => p.Id == parametros.Id);
 
             if (!string.IsNullOrWhiteSpace(parametros.Nome))
-                produtosDB = produtosDB.Where(p => p.Nome.ToLower().Equals(parametros.Nome.ToLower().Trim()));
+                produtosDB = produtosDB.Where(p => p.Nome.ToLower().Contains(parametros.Nome.ToLower().Trim()));
 
             if (parametros.Preco != null)
                 produtosDB = produtosDB.Where(p => p.Preco == parametros.Preco);

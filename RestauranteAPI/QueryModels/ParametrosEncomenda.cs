@@ -14,5 +14,6 @@ namespace RestauranteAPI.QueryModels
         public string Estado { get; set; }
         public string Morada { get; set; }
         public int? EstafetaId { get; set; }
+        public string EstafetaNome { get; set; }
     }
 }
