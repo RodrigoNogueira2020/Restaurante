@@ -36,17 +36,14 @@ namespace Restaurante.ClienteMVC.Controllers
 
         public async Task<IActionResult> ListarProdutos()
         {
-            // Efetua um request Get assíncrono
             var resposta = await _httpClient.GetAsync("produto");
 
-            // Caso o resquest não seja bem sucedido, é lançada uma exceção
             resposta.EnsureSuccessStatusCode();
-            // Obtém a resposta em formato de texto
+
             var conteudo = await resposta.Content.ReadAsStringAsync();
 
             List<Produto> produtos = new List<Produto>();
 
-            // Verificar se a resposta foi em JSON
             if (resposta.Content.Headers.ContentType != null &&
             resposta.Content.Headers.ContentType.MediaType == "application/json")
             {
@@ -54,13 +51,35 @@ namespace Restaurante.ClienteMVC.Controllers
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 };
-                // Deserializar JSON para uma lista de objetos da classe Produto
+
                 produtos = JsonSerializer.Deserialize<List<Produto>>(conteudo, opcoes);
             }
-
-            // Envia a lista para view
             return View(produtos);
         }
+
+        /*public async Task<IActionResult> AdicionarProduto()
+        {
+            HttpContent content = new StringContent();
+
+            var resposta = await _httpClient.PostAsync("produto", content);
+
+            resposta.EnsureSuccessStatusCode();
+
+            var conteudo = await resposta.Content.ReadAsStringAsync();
+
+            List<Produto> produtos = new List<Produto>();
+
+            if (resposta.Content.Headers.ContentType != null &&
+            resposta.Content.Headers.ContentType.MediaType == "application/json")
+            {
+                var opcoes = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
+                produtos = JsonSerializer.Deserialize<List<Produto>>(conteudo, opcoes);
+            }
+            return View(produtos);
+        }*/
 
         public async Task<IActionResult> ListarEncomendas()
         {

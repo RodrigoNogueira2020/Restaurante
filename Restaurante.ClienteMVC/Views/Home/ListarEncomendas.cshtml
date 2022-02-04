@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<Restaurante.ClienteMVC.Models.Encomenda>
 
 @{
-    ViewData["Title"] = "Lista de encomendas";
+    ViewData["Title"] = "ListarEncomendas";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>ListarEncomendas</h1>
+<h1>Lista de encomendas</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -13,9 +13,6 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.DataHoraAbertura)
             </th>
@@ -40,9 +37,6 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DataHoraAbertura)
             </td>
