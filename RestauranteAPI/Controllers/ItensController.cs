@@ -105,7 +105,9 @@ namespace RestauranteAPI.Controllers
         {
 
             //Verifica se o produto existe
-            if (!_context.Item.Any(p => p.Id == item.Id))
+            if (!_context.Produto.Any(p => p.Id == item.ProdutoId) 
+                || (!_context.Pedido.Any(p => p.Id == item.PedidoId)
+                && !_context.Encomenda.Any(p => p.Id == item.EncomendaId)))
                 return NotFound();
 
             else if (item.Quantidade <= 0)
