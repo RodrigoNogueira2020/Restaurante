@@ -1,0 +1,612 @@
+{
+	"info": {
+		"_postman_id": "3cacc8ac-5164-4821-b8c3-46997e5fd96f",
+		"name": "Projeto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Produtos",
+			"item": [
+				{
+					"name": "GET Todos os Produtos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2009/Produto/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Produto",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Todos os Produtos XML",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/xml",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:2009/Produto/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Produto",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Todos os Produtos - Paginação",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/xml",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:2009/Produto?tamanho=10&pagina=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Produto"
+							],
+							"query": [
+								{
+									"key": "tamanho",
+									"value": "10"
+								},
+								{
+									"key": "pagina",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Produto - ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2009/Produto?Id=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Produto"
+							],
+							"query": [
+								{
+									"key": "Id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Produto - Nome",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/xml",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:2009/Produto?Nome=Coca-Cola",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Produto"
+							],
+							"query": [
+								{
+									"key": "Nome",
+									"value": "Coca-Cola"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Produto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 0,\r\n  \"nome\": \"Pepsi Max\",\r\n  \"preco\": 2,\r\n  \"iva\": 0.1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2009/Produto/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Produto",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Atualizar Produto",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 2,\r\n    \"nome\": \"Coca-Cola XP\",\r\n    \"preco\": 1,\r\n    \"iva\": 0.1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2009/Produto/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Produto",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Produto",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2009/Produto/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Produto",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Itens",
+			"item": [
+				{
+					"name": "GET Todos os Itens",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2009/Item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Item"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Todos os Itens XML",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/xml",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:2009/Item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Item"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Todos os Itens - Nome do produto",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2009/Item?ProdutoNome=Francesinha",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Item"
+							],
+							"query": [
+								{
+									"key": "ProdutoNome",
+									"value": "Francesinha"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Todos os Itens - Quantidade",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2009/Item?Quantidade=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Item"
+							],
+							"query": [
+								{
+									"key": "Quantidade",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Produto dentro do item",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2009/Item/1/Produto/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Item",
+								"1",
+								"Produto",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Item",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 0,\r\n  \"encomendaId\": 3,\r\n  \"pedidoId\": 0,\r\n  \"produtoId\": 4,\r\n  \"quantidade\": 23\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2009/Item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Item"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Encomendas",
+			"item": [
+				{
+					"name": "GET Todas as Encomendas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2009/Encomenda",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Encomenda"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Todas as Encomendas XML",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/xml",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:2009/Encomenda",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Encomenda"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Todos os Itens da encomenda",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2009/Encomenda/1/Item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Encomenda",
+								"1",
+								"Item"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Item especifico da encomenda",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2009/Encomenda/1/Item/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Encomenda",
+								"1",
+								"Item",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pedidos",
+			"item": [
+				{
+					"name": "GET Todos os Itens do Pedido",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2009/Pedido/1/Item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Pedido",
+								"1",
+								"Item"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Item especifico de um pedido",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2009/Pedido/1/Item/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Pedido",
+								"1",
+								"Item",
+								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Estafetas",
+			"item": [
+				{
+					"name": "GET Estafeta pelo Nome",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2009/Estafeta?Nome=Diogo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Estafeta"
+							],
+							"query": [
+								{
+									"key": "Nome",
+									"value": "Diogo"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Estafeta pelo Nome e Disponibilidade",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2009/Estafeta?Nome=Diogo&Disponivel=true",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Estafeta"
+							],
+							"query": [
+								{
+									"key": "Nome",
+									"value": "Diogo"
+								},
+								{
+									"key": "Disponivel",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
