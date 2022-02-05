@@ -97,6 +97,59 @@ namespace RestauranteAPI.Controllers
             return Ok(encomendas);
         }
 
+        [HttpGet("{encomendaId:int}/Item/")]
+        public IActionResult ObterEncomendas(int encomendaId)
+        {
+            if (!_context.Encomenda.Any(p => p.Id == encomendaId))
+                return NotFound();
+
+            List<ItemDto> itensDto = new();
+
+            DbSet<Item> ItemDB = _context.Item;
+
+            foreach (Item i in ItemDB.Include(i => i.Produto).ToList())
+                itensDto = ItemDB.Where(i => i.EncomendaId == encomendaId)
+                    .Include(i => i.Produto)
+                    .Select(l => new ItemDto()
+                    {
+                        Id = l.Id,
+                        EncomendaId = l.EncomendaId,
+                        PedidoId = l.PedidoId,
+                        ProdutoId = l.ProdutoId,
+                        ProdutoNome = l.Produto.Nome,
+                        Quantidade = l.Quantidade,
+                    }).ToList();
+
+            return Ok(itensDto);
+        }
+
+        [HttpGet("{encomendaId:int}/Item/{itemId:int}")]
+        public async Task<IActionResult> ObterEncomendas(int encomendaId, int itemId)
+        {
+            Encomenda encomenda = await _context.Encomenda.Include(e => e.Itens).SingleOrDefaultAsync(e => e.Id == encomendaId);
+            if (encomenda == null || !encomenda.Itens.Any(i => i.Id == itemId))
+                return NotFound();
+
+            Item item = await _context.Item.Include(e => e.Produto).SingleOrDefaultAsync(p => p.Id == itemId);
+            if (item == null)
+                return NotFound();
+
+            ItemDto itemDto = new()
+            {
+                Id = item.Id,
+                EncomendaId = item.EncomendaId,
+                PedidoId = item.PedidoId,
+                ProdutoId = item.ProdutoId,
+                ProdutoNome = item.Produto.Nome,
+                Quantidade = item.Quantidade,
+            };
+
+            if (!encomenda.Itens.Any(e => e.Id == item.Id))
+                return NotFound();
+
+            return Ok(itemDto);
+        }
+
         // encomenda/1
         [HttpGet("{id}")]
         public IActionResult ObterEncomenda(int id)

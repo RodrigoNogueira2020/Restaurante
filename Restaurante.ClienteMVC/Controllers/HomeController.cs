@@ -57,30 +57,6 @@ namespace Restaurante.ClienteMVC.Controllers
             return View(produtos);
         }
 
-        public async Task<IActionResult> AdicionarProduto()
-        {
-            ////HttpContent content = new StringContent();
-
-            //var resposta = await _httpClient.PostAsync("produto", content);
-
-            //resposta.EnsureSuccessStatusCode();
-
-            //var conteudo = await resposta.Content.ReadAsStringAsync();
-
-            //List<Produto> produtos = new List<Produto>();
-
-            //if (resposta.Content.Headers.ContentType != null &&
-            //resposta.Content.Headers.ContentType.MediaType == "application/json")
-            //{
-            //    var opcoes = new JsonSerializerOptions
-            //    {
-            //        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            //    };
-            //    produtos = JsonSerializer.Deserialize<List<Produto>>(conteudo, opcoes);
-            //}
-            return View();
-        }
-
         public async Task<IActionResult> ListarEncomendas()
         {
             var resposta = await _httpClient.GetAsync("encomenda");

@@ -91,6 +91,60 @@ namespace RestauranteAPI.Controllers
             return Ok(produtos);
         }
 
+        [HttpGet("{pedidoId:int}/Item/")]
+        public IActionResult ObterEncomendas(int pedidoId)
+        {
+            if (!_context.Pedido.Any(p => p.Id == pedidoId))
+                return NotFound();
+
+            List<ItemDto> itensDto = new();
+
+            DbSet<Item> ItemDB = _context.Item;
+
+            foreach (Item i in ItemDB.Include(i => i.Produto).ToList())
+                itensDto = ItemDB.Where(i => i.PedidoId == pedidoId)
+                    .Include(i => i.Produto)
+                    .Select(l => new ItemDto()
+                    {
+                        Id = l.Id,
+                        EncomendaId = l.EncomendaId,
+                        PedidoId = l.PedidoId,
+                        ProdutoId = l.ProdutoId,
+                        ProdutoNome = l.Produto.Nome,
+                        Quantidade = l.Quantidade,
+                    }).ToList();
+
+            return Ok(itensDto);
+        }
+
+        [HttpGet("{pedidoId:int}/Item/{itemId:int}")]
+        public async Task<IActionResult> ObterEncomendas(int pedidoId, int itemId)
+        {
+            Pedido pedido = await _context.Pedido.Include(e => e.Itens).SingleOrDefaultAsync(p => p.Id == pedidoId);
+            if (pedido == null || !pedido.Itens.Any(i => i.Id == itemId))
+                return NotFound();
+
+            Item item = await _context.Item.Include(e => e.Produto).SingleOrDefaultAsync(p => p.Id == itemId);
+            if (item == null)
+                return NotFound();
+
+            ItemDto itemDto = new()
+            {
+                Id = item.Id,
+                EncomendaId = item.EncomendaId,
+                PedidoId = item.PedidoId,
+                ProdutoId = item.ProdutoId,
+                ProdutoNome = item.Produto.Nome,
+                Quantidade = item.Quantidade,
+            };
+
+            if (!pedido.Itens.Any(e => e.Id == item.Id))
+                return NotFound();
+
+            return Ok(itemDto);
+        }
+
+
         [HttpGet("{id}")]
         public IActionResult ObterPedido(int id)
         {
