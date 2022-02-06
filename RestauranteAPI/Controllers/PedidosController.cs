@@ -228,7 +228,7 @@ namespace RestauranteAPI.Controllers
 
             Pedido pedidoDB = _context.Pedido.Where(e => e.Id == id).SingleOrDefault();
 
-            pedidoDB.Estado = "Fechado";
+            pedidoDB.Estado = "Servido";
 
             _context.Entry(pedidoDB).State = EntityState.Modified;
 

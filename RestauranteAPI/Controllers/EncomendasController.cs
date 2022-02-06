@@ -236,7 +236,7 @@ namespace RestauranteAPI.Controllers
             Encomenda encomendaDB = _context.Encomenda.Include(e => e.Estafeta).Where(e => e.Id == id).SingleOrDefault();
 
             encomendaDB.Estafeta.Disponivel = false;
-            encomendaDB.Estado = "Fechada";
+            encomendaDB.Estado = "Servido";
 
             _context.Entry(encomendaDB).State = EntityState.Modified;
 
