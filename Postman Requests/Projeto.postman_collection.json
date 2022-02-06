@@ -324,7 +324,7 @@
 					"response": []
 				},
 				{
-					"name": "GET Todos os Itens - Quantidade",
+					"name": "GET Todos os Itens - Nome Copy",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {}
 					},
@@ -332,7 +332,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:2009/Item?Quantidade=2",
+							"raw": "http://localhost:2009/Item?ProdutoNome=Francesinha",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -343,8 +343,8 @@
 							],
 							"query": [
 								{
-									"key": "Quantidade",
-									"value": "2"
+									"key": "ProdutoNome",
+									"value": "Francesinha"
 								}
 							]
 						}
