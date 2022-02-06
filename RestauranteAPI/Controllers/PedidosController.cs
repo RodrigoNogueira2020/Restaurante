@@ -220,6 +220,32 @@ namespace RestauranteAPI.Controllers
             return NoContent();
         }
 
+        [HttpPut("FecharPedido/{id}")]
+        public async Task<IActionResult> FecharPedido([FromRoute] int id)
+        {
+            if (!_context.Pedido.Any(e => e.Id == id))
+                return BadRequest();
+
+            Pedido pedidoDB = _context.Pedido.Where(e => e.Id == id).SingleOrDefault();
+
+            pedidoDB.Estado = "Fechado";
+
+            _context.Entry(pedidoDB).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (_context.Pedido.Find(id) == null)
+                    return NotFound();
+
+                throw;
+            }
+            return NoContent();
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> ApagarPedido(int id)
         {

@@ -65,6 +65,9 @@ namespace RestauranteAPI.Controllers
             if(_context.Estafeta.Any(p => p.Id == estafeta.Id))
                 return Conflict();
 
+            if (!estafeta.Disponivel)
+                estafeta.Disponivel = true;
+
             _context.Estafeta.Add(estafeta);
             await _context.SaveChangesAsync();
             return CreatedAtAction("ObterTodosEstafetas", new ParametrosEstafeta { Id = estafeta.Id }, estafeta);

@@ -197,10 +197,10 @@ namespace RestauranteAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> AdicionarEncomenda([FromBody] Encomenda encomenda)
         {
-            if (!_context.Encomenda.Any(e => e.Id == encomenda.Id))
-                return NotFound();
+            Encomenda encomendaDB = _context.Encomenda.Where(e => e.Id == encomenda.Id).Single();
 
-            _context.Encomenda.Add(encomenda);
+            encomendaDB.Estafeta.Disponivel = false;
+
             await _context.SaveChangesAsync();
             return CreatedAtAction("ObterTodasEncomendas", new { id = encomenda.Id }, encomenda);
         }
@@ -226,6 +226,34 @@ namespace RestauranteAPI.Controllers
             }
             return NoContent();
         }
+
+        [HttpPut("FecharEncomenda/{id}")]
+        public async Task<IActionResult> FecharEncomenda([FromRoute] int id)
+        {
+            if (!_context.Encomenda.Any(e => e.Id == id))
+                return BadRequest();
+
+            Encomenda encomendaDB = _context.Encomenda.Include(e => e.Estafeta).Where(e => e.Id == id).SingleOrDefault();
+
+            encomendaDB.Estafeta.Disponivel = false;
+            encomendaDB.Estado = "Fechada";
+
+            _context.Entry(encomendaDB).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (_context.Encomenda.Find(id) == null)
+                    return NotFound();
+
+                throw;
+            }
+            return NoContent();
+        }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> ApagarEncomenda(int id)

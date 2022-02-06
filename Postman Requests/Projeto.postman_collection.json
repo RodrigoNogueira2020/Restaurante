@@ -360,7 +360,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:2009/Item/1/Produto/2",
+							"raw": "http://localhost:2009/Item/1/Produto/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -370,7 +370,7 @@
 								"Item",
 								"1",
 								"Produto",
-								"2"
+								""
 							]
 						}
 					},
@@ -412,6 +412,26 @@
 		{
 			"name": "Encomendas",
 			"item": [
+				{
+					"name": "GET Encomenda",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2009/Encomenda/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Encomenda",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "GET Todas as Encomendas",
 					"request": {
@@ -498,12 +518,53 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "PUT Fechar Pedido Copy",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2009/Pedido/FecharPedido/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Pedido",
+								"FecharPedido",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
 		{
 			"name": "Pedidos",
 			"item": [
+				{
+					"name": "GET Pedido",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2009/Pedido/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Pedido",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "GET Todos os Itens do Pedido",
 					"request": {
@@ -542,6 +603,27 @@
 								"1",
 								"Item",
 								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Fechar Pedido",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2009/Pedido/FecharPedido/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2009",
+							"path": [
+								"Pedido",
+								"FecharPedido",
+								"1"
 							]
 						}
 					},
